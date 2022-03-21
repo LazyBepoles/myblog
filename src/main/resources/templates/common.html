@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--导航-->
+<nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small" th:fragment="menu(n)">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <a th:href="@{/index}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i
+                    class="home icon"></i>首页</a>
+            <a th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i
+                    class="idea icon"></i>分类</a>
+            <a th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i
+                    class="tags icon"></i>标签</a>
+            <a th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i
+                    class="clone icon"></i>归档</a>
+<!--            <a th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i-->
+<!--                    class="info icon"></i>关于我</a>-->
+            <div class="right m-item item m-mobile-hide">
+                <form th:action="@{/search}" target="_blank" method="post" name="searchForm">
+                    <div class="ui icon inverted transparent input m-margin-tb-tiny">
+                        <input type="text" placeholder="Search...." name="query" th:value="${query}">
+                        <i onclick="document.forms['searchForm'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a class="ui menu toggle black icon button m-right-top m-mobile-show button">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!--底部footer-->
+<footer class="ui inverted vertical segment m-padded-tb-massive" th:fragment="footer">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">欢迎关注</h4>
+                <div class="ui inverted link list">
+                    <a href="https://b23.tv/5p6UxLy" target="_blank" class="item m-text-thin">向晚大魔王</a>
+                    <a href="https://b23.tv/HqQg8yX" target="_blank" class="item m-text-thin">贝拉kira</a>
+                    <a href="https://b23.tv/cJuvNYp" target="_blank" class="item m-text-thin">珈乐Carol</a>
+                    <a href="https://b23.tv/7IyfTDR" target="_blank" class="item m-text-thin">嘉然今天吃什么</a>
+                    <a href="https://b23.tv/RMWAS3S" target="_blank" class="item m-text-thin">乃琳Queen</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">技术支持</h4>
+                <div class="ui inverted link list">
+                    <div class="item m-text-thin">SpringBoot</div>
+                    <div class="item m-text-thin">Thymeleaf</div>
+                    <div class="item m-text-thin">MySQL</div>
+                    <div class="item m-text-thin">Mybatis</div>
+                    <div class="item m-text-thin">Markdown</div>
+                </div>
+            </div>
+            <div class="six wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">-----底线-----</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 Designed by Liang</p>
+    </div>
+</footer>
+</body>
+</html>

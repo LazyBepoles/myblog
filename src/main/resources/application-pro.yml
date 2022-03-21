@@ -1,0 +1,9 @@
+server:
+  port: 8081
+logging:
+  level:
+    root: warn
+    cn.liang: info
+  file:
+    name: log/blog-pro.log
+

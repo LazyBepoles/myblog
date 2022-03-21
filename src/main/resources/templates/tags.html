@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>标签</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="common :: menu(3)"></nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!--header-->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">标签</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${#arrays.length(tagInfo)}"> 14 </h2> 个
+                </div>
+            </div>
+        </div>
+        <div class="ui attached segment m-padded-tb-large">
+            <a th:href="@{/tags/{id}(id=${tag.id})}" th:classappend="${tag.id==currentId} ? 'teal'"
+               class="ui basic left pointing large label m-margin-tb-tiny" th:each="tag : ${tagInfo}">
+                <span th:text="${tag.name}"></span>
+                <div class="detail" th:text="${#arrays.length(tag.blogs)}">23</div>
+            </a>
+        </div>
+        <div id="table-container" th:fragment="tagList">
+            <div class="ui top attached teal segment">
+                <div class="ui padded vertical segment m-padded-tb-large m-mobile-lr-clear" th:each="blog : ${blogInfo.list}">
+                    <div class="ui mobile reversed stackable grid">
+                        <div class="eleven wide column">
+                            <h3 class="ui header"><a th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black" th:text="${blog.title}"></a></h3>
+                            <p class="m-text" th:text="|${blog.description}......|"></p>
+                            <div class="ui stackable grid">
+                                <div class="row">
+                                    <div class="eleven wide column">
+                                        <div class="ui mini horizontal link list">
+                                            <div class="item">
+                                                <img th:src="@{${blog.user.avatar}}" alt=""
+                                                     class="ui avatar image">
+                                                <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">李仁密</a></div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="calendar icon"></i><span
+                                                    th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></span>
+                                            </div>
+                                            <div class="item">
+                                                <i class="eye icon"></i><span th:text="${blog.views}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right aligned five wide column">
+                                        <a th:href="@{/types/{id}(id=${blog.typeId})}" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}"></a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="column">
+                                        <a href="#" th:href="@{/tags/{id}(id=${tag.id})}"
+                                           class="ui  basic left pointing label m-padded-mini m-text-thin"
+                                           th:classappend="${tag.id==currentId} ? 'teal'" th:each="tag : ${blog.tags}" th:text="${tag.name}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="five wide column">
+                            <a th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                                <img th:src="@{${blog.headerImage}}" alt="" class="ui rounded image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui bottom attached segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <a th:unless="${blogInfo.isFirstPage}"
+                           class="ui mini teal basic button" onclick="page(this)" th:attr="data-page=${blogInfo.pageNum}-1">上一页</a>
+                    </div>
+                    <div class="right aligned column">
+                        <a th:unless="${blogInfo.isLastPage}"
+                           class="ui mini teal basic button" onclick="page(this)" th:attr="data-page=${blogInfo.pageNum}+1">下一页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui form">
+    <input type="hidden" name="page">
+    <input type="hidden" name="currentId" th:value="${currentId}">
+</div>
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="common :: footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+    function page(obj){
+        $("[name='page']").val($(obj).data("page"));
+        loaddata()
+    }
+    function loaddata(){
+        $("#table-container").load("/tags/next",{
+            id:$("[name='currentId']").val(),
+            pageNum:$("[name='page']").val()
+        });
+    }
+</script>
+</body>
+</html>

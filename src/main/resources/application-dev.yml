@@ -1,0 +1,8 @@
+logging:
+  level:
+    root: info
+    cn.liang: debug
+  file:
+    name: log/blog-dev.log
+
+

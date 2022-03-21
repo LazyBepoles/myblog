@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>修改分类</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/admin-common :: menu(2)"></nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a th:href="@{/admin/types/add}" class="item"
+               th:classappend="${#httpServletRequest.requestURI eq '/admin/types/add'} ? 'teal active'">新增</a>
+            <a th:href="@{/admin/types}" class="item">列表</a>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <form th:action="@{/admin/types}" method="post" class="ui form">
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label class="ui teal basic label">分类</label>
+                    <input type="hidden" name="id" th:value="${type.id}">
+                    <input id="name" type="text" name="name" placeholder="分类名称" th:value="${type.name}">
+                    <input type="hidden" name="_method" value="put"
+                           th:unless="${#httpServletRequest.requestURI eq '/admin/types/add'}">
+                    <a onclick="checkType()" class="ui teal button">Check</a>
+                </div>
+            </div>
+            <div class="ui error message"></div>
+            <div class="ui right aligned container">
+                <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+                <button class="ui teal submit disabled button">修改</button>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="common :: footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $(function(){
+        $('input').on('keydown',
+            function(e){
+                var key = window.event ? e.keyCode : e.which;
+                if(key == 13){
+                    return false;
+                }
+            }
+        );
+    });
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'name',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入分类名称'
+                }]
+            }
+        }
+    });
+    function checkType() {
+        let json = $('#name').serialize();
+        if($('#name').val()==''){
+            $('.ui.error.message').show().text("请输入分类名称")
+        }else {
+            $.ajax({
+                type: "POST",
+                url: "/admin/checkType",
+                data: json,
+                dataType : "json",
+                statusCode: {
+                    204:function (){
+                        $('.ui.error.message').hide()
+                        $('.ui.teal.submit.button').removeClass("disabled")
+                    },
+                    500:function (){
+                        $('.ui.error.message').show().text("分类已存在")
+                        $('.ui.teal.submit.button').addClass("disabled")
+                    }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>
